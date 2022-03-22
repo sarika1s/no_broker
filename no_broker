@@ -1,0 +1,27 @@
+import requests
+import bs4
+list_of_res=['bangalore','mumbai','gurgaon','chennai']
+
+for re in list_of_res:
+    bhk=[]
+    place=[]
+    url='https://www.nobroker.in/prophub/new-builder-projects/new-builder-projects-in-'+re
+    res = requests.get(url=url)
+
+   
+    soup = bs4.BeautifulSoup(res.content, 'html.parser')
+    for j in soup.find_all('ul'):
+      bhk.append(j.li.text.strip())
+      for k in j.find_all('li',style="    padding-top: 8px;"):
+        bhk.append(k.text.strip())
+       
+    for i in range(0, len(bhk),3):
+      l2=[]
+      for j in range(i,i+3):
+        l2.append(bhk[j])
+      if '2BHK' in l2[1] and '3BHK' in l2[1] and '1BHK' not in l2[1] and '4BHK' not in l2[1]:
+        place.append(l2)
+      elif '2 BHK' in l2[1] and '3 BHK' in l2[1] and '1 BHK' not in l2[1] and '4 BHK' not in l2[1]:
+        place.append(l2)  
+   
+    print(re,"\n",place)
